@@ -1,0 +1,44 @@
+#!/bin/python
+import sys
+import os
+
+BASIC_INPUT = sys.argv
+
+if len(BASIC_INPUT) > 1:
+
+	if BASIC_INPUT[1] == "-c":
+
+		f = open(".cnt","r")
+		s = f.read().split('__')
+		for item in s:
+			if item != '':
+				_TEMP = item.split('#')
+				if len(BASIC_INPUT) > 2:
+					if BASIC_INPUT[2] == _TEMP[0]:
+						_TEMP_STR = 'sftp %s@%s' % (_TEMP[1],_TEMP[2])
+						os.system(_TEMP_STR)
+						break;
+				else:
+					print("Select connection (use -l[ist])")
+					break;
+	elif BASIC_INPUT[1] == "add":
+
+		f = open(".cnt","a")
+		f.write("__" + BASIC_INPUT[2] + "#" + BASIC_INPUT[3] + "#" + BASIC_INPUT[4])
+		f.close()
+
+	elif BASIC_INPUT[1] == "-l":
+
+		f = open(".cnt","r")
+		s = f.read().split('__')
+		for item in s:
+			if item != '':
+				STR = item.split('#');
+				print("> " + STR[0] + " | " + STR[1] + " | " + STR[2])
+else:
+
+	print('Connecto v 1.0 \n')
+	print('> -c[connect] + connection name \n')
+	print('> -l[list] to show connection \n')
+	print('> add [connection title] [user] [host] to add connection')
+	print('\n')
