@@ -82,8 +82,9 @@ if len(BASIC_INPUT) > 1:
 else:
 
 	print('Connecto v 1.0 \n')
-	print('> -c[connect] + connection name \n')
-	print('> -l[list] to show connection \n')
+	print('> -c[onnect] + connection name \n')
+	print('> -l[ist] to show connection \n')
 	print('> add [connection title] [user] [host] to add connection\n')
-	print('> -d [delete] [connection title] delete connection')
+	print('> -e[dit] [connection title] [user] [host] edit connection\n')
+	print('> -d[elete] [connection title] delete connection')
 	print('\n')
