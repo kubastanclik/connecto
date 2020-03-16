@@ -3,12 +3,13 @@ import sys
 import os
 
 BASIC_INPUT = sys.argv
+FILE_PATH = "/usr/local/bin/.cnt"
 
 if len(BASIC_INPUT) > 1:
 
 	if BASIC_INPUT[1] == "-c":
 
-		f = open(".cnt","r")
+		f = open(FILE_PATH,"r")
 		s = f.read().split('__')
 		for item in s:
 			if item != '':
@@ -23,22 +24,66 @@ if len(BASIC_INPUT) > 1:
 					break;
 	elif BASIC_INPUT[1] == "add":
 
-		f = open(".cnt","a")
+		f = open(FILE_PATH,"a")
 		f.write("__" + BASIC_INPUT[2] + "#" + BASIC_INPUT[3] + "#" + BASIC_INPUT[4])
+		print("> " + BASIC_INPUT[2] + " -> added")
 		f.close()
 
 	elif BASIC_INPUT[1] == "-l":
 
-		f = open(".cnt","r")
+		f = open(FILE_PATH,"r")
 		s = f.read().split('__')
 		for item in s:
 			if item != '':
 				STR = item.split('#');
 				print("> " + STR[0] + " | " + STR[1] + " | " + STR[2])
+
+	elif BASIC_INPUT[1] == "-e":
+
+		f = open(FILE_PATH,"r")
+		s = f.read().split('__')
+		for item in s:
+			if item != '':
+				_TEMP = item.split('#')
+				if len(BASIC_INPUT) > 3:
+					if BASIC_INPUT[2] == _TEMP[0]:
+						_f = open(FILE_PATH,"rt")
+						_data = _f.read()
+						_data = _data.replace(_TEMP[1],BASIC_INPUT[3])
+						_data = _data.replace(_TEMP[2],BASIC_INPUT[4])
+						_s = open(FILE_PATH,'w')
+						_s.write(_data)
+						print("> " + _TEMP[0] + " -> replaced.")
+				else:
+					print("> Select connection title -l[list]")
+					break;
+
+	elif BASIC_INPUT[1] == "-d":
+
+		f = open(FILE_PATH,"r")
+		s = f.read().split('__')
+		for item in s:
+			if item != '':
+				_TEMP = item.split('#')
+				if len(BASIC_INPUT) > 1:
+					if BASIC_INPUT[2] == _TEMP[0]:
+						_f = open(FILE_PATH,"rt")
+						_data = _f.read()
+						_data = _data.replace("__" + _TEMP[0] + "#" + _TEMP[1] + "#" + _TEMP[2],'')
+						_s = open(FILE_PATH,'w')
+						print("> Want to delete " + _TEMP[0] + "? (y/n)")
+						realy = input()
+						if realy == "y":
+							_s.write(_data)
+							print("> " + _TEMP[0] + " -> deleted")
+							_s.close()
+						else:
+							_s.close()
 else:
 
 	print('Connecto v 1.0 \n')
 	print('> -c[connect] + connection name \n')
 	print('> -l[list] to show connection \n')
-	print('> add [connection title] [user] [host] to add connection')
+	print('> add [connection title] [user] [host] to add connection\n')
+	print('> -d [delete] [connection title] delete connection')
 	print('\n')
