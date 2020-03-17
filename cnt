@@ -15,19 +15,35 @@ if len(BASIC_INPUT) > 1:
 			if item != '':
 				_TEMP = item.split('#')
 				if len(BASIC_INPUT) > 2:
-					if BASIC_INPUT[2] == _TEMP[0]:
+					if BASIC_INPUT[2] in _TEMP:
 						_TEMP_STR = 'sftp %s@%s' % (_TEMP[1],_TEMP[2])
 						os.system(_TEMP_STR)
-						break;
+						print("connected")
+
 				else:
 					print("Select connection (use -l[ist])")
-					break;
+					break
 	elif BASIC_INPUT[1] == "add":
-
-		f = open(FILE_PATH,"a")
-		f.write("__" + BASIC_INPUT[2] + "#" + BASIC_INPUT[3] + "#" + BASIC_INPUT[4])
-		print("> " + BASIC_INPUT[2] + " -> added")
-		f.close()
+		if len(BASIC_INPUT) > 3:
+			f = open(FILE_PATH,"r")
+			s = f.read().split('__')
+			#print(BASIC_INPUT[0])
+			#print(s)
+			for item in s:
+				if item != '':
+					_TEMP = item.split('#')
+					if BASIC_INPUT[2] != _TEMP[0]:
+						_f = open(FILE_PATH,"a")
+						_data = "__" + BASIC_INPUT[2] + "#" + BASIC_INPUT[3] + "#" + BASIC_INPUT[4]
+						_f.write(_data)
+						_f.close()
+						print("> Added -> " + BASIC_INPUT[2])
+						break
+					else:
+						print("> Duplicate detected at " + _TEMP[0])
+						break
+		else:
+			print("Add some params...")
 
 	elif BASIC_INPUT[1] == "-l":
 
@@ -46,7 +62,7 @@ if len(BASIC_INPUT) > 1:
 			if item != '':
 				_TEMP = item.split('#')
 				if len(BASIC_INPUT) > 3:
-					if BASIC_INPUT[2] == _TEMP[0]:
+					if BASIC_INPUT[2] in _TEMP:
 						_f = open(FILE_PATH,"rt")
 						_data = _f.read()
 						_data = _data.replace(_TEMP[1],BASIC_INPUT[3])
@@ -54,9 +70,10 @@ if len(BASIC_INPUT) > 1:
 						_s = open(FILE_PATH,'w')
 						_s.write(_data)
 						print("> " + _TEMP[0] + " -> replaced.")
+						break
 				else:
 					print("> Select connection title -l[list]")
-					break;
+					break
 
 	elif BASIC_INPUT[1] == "-d":
 
@@ -67,24 +84,23 @@ if len(BASIC_INPUT) > 1:
 				_TEMP = item.split('#')
 				if len(BASIC_INPUT) > 1:
 					if BASIC_INPUT[2] == _TEMP[0]:
-						_f = open(FILE_PATH,"rt")
-						_data = _f.read()
-						_data = _data.replace("__" + _TEMP[0] + "#" + _TEMP[1] + "#" + _TEMP[2],'')
-						_s = open(FILE_PATH,'w')
 						print("> Want to delete " + _TEMP[0] + "? (y/n)")
 						realy = input()
 						if realy == "y":
+							_f = open(FILE_PATH,"rt")
+							_data = _f.read()
+							_data = _data.replace("__" + _TEMP[0] + "#" + _TEMP[1] + "#" + _TEMP[2],'')
+							_s = open(FILE_PATH,'w')
 							_s.write(_data)
 							print("> " + _TEMP[0] + " -> deleted")
 							_s.close()
-						else:
-							_s.close()
-else:
 
+else:
+	print('\n')
 	print('Connecto v 1.0 \n')
-	print('> -c[onnect] + connection name \n')
+	print('> -c[onnect] [connection title] to connect via sftp \n')
 	print('> -l[ist] to show connection \n')
 	print('> add [connection title] [user] [host] to add connection\n')
-	print('> -e[dit] [connection title] [user] [host] edit connection\n')
-	print('> -d[elete] [connection title] delete connection')
+	print('> -d[elete] [connection title] delete connection\n')
+	print('> -e[dit] [connection title] [user] [host] to edit connection')
 	print('\n')
